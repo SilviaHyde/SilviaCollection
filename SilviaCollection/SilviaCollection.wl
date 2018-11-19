@@ -12,6 +12,7 @@ PackageExport["inputHistoryViewer"]
 PackageExport["StringSplitNested"]
 PackageExport["colorFromHex"]
 PackageExport["colorToHex"]
+PackageExport["DatasetGrid"]
 
 
 ClearAll[branch]
@@ -31,9 +32,6 @@ USAGE:
 traceRes = Trace[Reduce[x^2 == -1, x], TraceInternal -> True, TraceDepth -> 3];
 Export["tracePrintTest.txt", levelIndentFunc@traceRes, "String"]
 *)
-
-(*On["Packing"]*)
-(*Needs["Spelunking`"]*)
 
 
 ClearAll[horizontalTreeForm]
@@ -97,8 +95,6 @@ toRegularArray[raggedLst_] :=
                                      
                                     ]
 
-(* SetOptions[$FrontEndSession, TranslationOptions -> {"Language" -> "CustomAnnotation"}] *)
-
 
 ClearAll[inputHistoryViewer]
 inputHistoryViewer[range:{__Integer}]:=Column[InString/@range//ToExpression//RawBoxes/@#&//Style[#,"Input",ShowStringCharacters->True]&/@#&,Frame->All,ItemSize->Full]
@@ -107,3 +103,16 @@ inputHistoryViewer[range:{__Integer}]:=Column[InString/@range//ToExpression//Raw
 ClearAll[StringSplitNested]
 StringSplitNested[str_String,delimiterLst:{__}]:=Fold[Function[{expr,delimiter},Map[StringSplit[#,delimiter]&,expr,{-1}]],str,delimiterLst]
 StringSplitNested[str_String,deliStr_String]:=StringSplitNested[str,Characters@deliStr]
+
+
+ClearAll[DatasetGrid]
+DatasetGrid = RightComposition[
+   ToBoxes
+   , Cases[#, Style[Grid[__], __], \[Infinity]][[1]] &
+   , ReplaceRepeated[{
+        Mouseover[e_, ___] :> e, MouseAppearance[e_, ___] :> e, 
+        EventHandler[e_, ___] :> e, 
+        Annotation[e_, ___] :> e, (ContextMenu -> _) :> Sequence[]
+     }]
+   ];
+
