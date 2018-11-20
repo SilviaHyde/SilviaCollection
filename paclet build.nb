@@ -10,19 +10,30 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      5633,        155]
-NotebookOptionsPosition[      4619,        131]
-NotebookOutlinePosition[      4966,        146]
-CellTagsIndexPosition[      4923,        143]
+NotebookDataLength[      6745,        176]
+NotebookOptionsPosition[      5749,        154]
+NotebookOutlinePosition[      6094,        169]
+CellTagsIndexPosition[      6051,        166]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 Cell[BoxData[
- RowBox[{"Needs", "[", "\"\<PacletManager`\>\"", "]"}]], "Input",
+ RowBox[{"Needs", "[", "\"\<PacletManager`\>\"", "]"}]], "InitializationCell",
+ CellChangeTimes->{{3.751554519701045*^9, 3.7515545258504267`*^9}, 
+   3.7515897715834656`*^9, {3.7515899309688845`*^9, 3.751589932042671*^9}, 
+   3.7515899553262444`*^9, {3.751590575507745*^9, 
+   3.7515905817540216`*^9}},ExpressionUUID->"63a9cdd2-d4a2-4553-b44d-\
+e3c1efa942fd"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"packageName", "=", "\"\<SilviaCollection\>\""}], ";"}]], "Input",
+ CellChangeTimes->{{3.7515906924103975`*^9, 3.751590709701289*^9}, 
+   3.751689624411496*^9},
  CellLabel->
-  "11/19/18 12:26:54 \
-In[2]:=",ExpressionUUID->"715490cd-28c5-400d-80ea-dcf489382e9a"],
+  "11/20/18 16:00:26 \
+In[5]:=",ExpressionUUID->"c1580a27-0d67-40ef-b421-e67f2099471a"],
 
 Cell[BoxData[{
  RowBox[{
@@ -32,7 +43,7 @@ Cell[BoxData[{
   RowBox[{"packdir", "=", 
    RowBox[{"FileNameJoin", "[", 
     RowBox[{"{", 
-     RowBox[{"projdir", ",", "\"\<SilviaCollection\>\""}], "}"}], "]"}]}], 
+     RowBox[{"projdir", ",", "packageName"}], "}"}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"releasedir", "=", 
@@ -41,10 +52,11 @@ Cell[BoxData[{
      RowBox[{"projdir", ",", "\"\<release\>\""}], "}"}], "]"}]}], 
   ";"}]}], "Input",
  CellChangeTimes->{{3.751589728642379*^9, 3.75158973582628*^9}, 
-   3.7515897657373266`*^9, {3.751589936012869*^9, 3.75158995138229*^9}},
- CellLabel->
-  "11/19/18 12:27:06 \
-In[3]:=",ExpressionUUID->"3b7ec5a0-1eab-4431-bc24-6efead5bc8bb"],
+   3.7515897657373266`*^9, {3.751589936012869*^9, 3.75158995138229*^9}, {
+   3.751590532680421*^9, 3.7515905445767803`*^9}, 3.7515907186721973`*^9, {
+   3.751689682058819*^9, 
+   3.7516896829592476`*^9}},ExpressionUUID->"b1cbed21-200f-47c6-9257-\
+de37cd5f985d"],
 
 Cell[CellGroupData[{
 
@@ -52,14 +64,24 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{"pacletpath", "=", 
    RowBox[{"PackPaclet", "[", 
-    RowBox[{"packdir", ",", "releasedir"}], "]"}]}], ";"}], "\n", 
- RowBox[{"PacletInstall", "[", "pacletpath", "]"}]}], "Input",
+    RowBox[{"packdir", ",", "releasedir"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"PacletFind", "[", "packageName", "]"}], "=!=", 
+    RowBox[{"{", "}"}]}], ",", 
+   RowBox[{"PacletUninstall", "[", "packageName", "]"}]}], "]"}], "\n", 
+ RowBox[{"PacletInstall", "[", "pacletpath", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"PacletFind", "[", "packageName", "]"}]}], "Input",
  CellChangeTimes->{{3.751554519701045*^9, 3.7515545258504267`*^9}, 
    3.7515897715834656`*^9, {3.7515899309688845`*^9, 3.751589932042671*^9}, 
-   3.7515899553262444`*^9, {3.7515904062637787`*^9, 3.7515904062793984`*^9}},
+   3.7515899553262444`*^9, {3.751590575507745*^9, 3.7515905817540216`*^9}, 
+   3.7515906875104733`*^9, {3.75159072150735*^9, 3.7515907229269915`*^9}, {
+   3.7515907569296865`*^9, 3.7515907571796846`*^9}, 3.751689653670752*^9},
  CellLabel->
-  "11/19/18 12:27:14 \
-In[6]:=",ExpressionUUID->"a5f27418-18e7-4657-94c5-bb5da0c922e9"],
+  "11/20/18 16:01:01 \
+In[9]:=",ExpressionUUID->"d39b4494-e3f9-426b-b452-4e3eda331ba8"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -77,21 +99,11 @@ SilviaCollection-0.0.1"]]], "Output",
  CellChangeTimes->{3.751538447877312*^9, 3.751545537820163*^9, 
   3.7515542494244857`*^9, 3.7515545040914*^9, 3.7515545584355164`*^9, 
   3.7515550887087355`*^9, 3.7515555007143936`*^9, 3.7515893320346737`*^9, 
-  3.7515904356226134`*^9},
+  3.7515906184142675`*^9, 3.7515907443492017`*^9, 3.7515907596018906`*^9, 
+  3.751591083011486*^9, 3.7516896644511757`*^9},
  CellLabel->
-  "11/19/18 12:27:15 \
-Out[7]=",ExpressionUUID->"d5efa1f3-1caf-4e53-90d4-0d98a6280904"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"PacletFind", "[", "\"\<SilviaCollection\>\"", "]"}]], "Input",
- CellChangeTimes->{{3.7515451635573263`*^9, 3.7515451750809364`*^9}, 
-   3.7515893443179226`*^9},
- CellLabel->
-  "11/19/18 12:27:17 \
-In[8]:=",ExpressionUUID->"6d3865c8-14ef-4b52-91d2-52b39659e681"],
+  "11/20/18 16:01:04 \
+Out[11]=",ExpressionUUID->"50153d35-1ccf-4ab7-bda3-55be57f577f4"],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -107,30 +119,41 @@ Cell[BoxData[
       "Kernel", "Root" -> ".", "Context" -> "SilviaCollection`"}}, "Location" -> 
     "C:\\Users\\Susilvia\\AppData\\Roaming\\Mathematica\\Paclets\\Repository\\\
 SilviaCollection-0.0.1"]], "}"}]], "Output",
- CellChangeTimes->{3.7515451754819465`*^9, 3.751555503594946*^9, 
-  3.7515893455382566`*^9, 3.751589784100624*^9, 3.7515904375645633`*^9},
+ CellChangeTimes->{3.751538447877312*^9, 3.751545537820163*^9, 
+  3.7515542494244857`*^9, 3.7515545040914*^9, 3.7515545584355164`*^9, 
+  3.7515550887087355`*^9, 3.7515555007143936`*^9, 3.7515893320346737`*^9, 
+  3.7515906184142675`*^9, 3.7515907443492017`*^9, 3.7515907596018906`*^9, 
+  3.751591083011486*^9, 3.7516896644668083`*^9},
  CellLabel->
-  "11/19/18 12:27:17 \
-Out[8]=",ExpressionUUID->"6afb2c28-8fb2-492a-8a0c-dea4417d41cf"]
+  "11/20/18 16:01:04 \
+Out[12]=",ExpressionUUID->"93aa2adc-9dbd-4855-ba05-2eb0e1923539"]
 }, Open  ]],
 
 Cell[BoxData[
- RowBox[{"PacletUninstall", "[", "\"\<SilviaCollection\>\"", "]"}]], "Input",
- CellChangeTimes->{{3.7515451784711905`*^9, 3.7515451872463827`*^9}, 
-   3.7515893508083553`*^9},
+ RowBox[{
+  RowBox[{
+   TemplateBox[{"Get"},
+    "InactiveHead",
+    BaseStyle->"Inactive",
+    SyntaxForm->"Symbol",
+    Tooltip->"Inactive[Get]"], "[", 
+   RowBox[{"packageName", "<>", "\"\<`\>\""}], "]"}], "//", 
+  "Activate"}]], "Input",
+ CellChangeTimes->{
+  3.7515907817944355`*^9, 3.751590792416787*^9, {3.7515908129770107`*^9, 
+   3.751590830385948*^9}},
  CellLabel->
-  "11/19/18 12:26:40 \
-In[1]:=",ExpressionUUID->"9dcb88a0-bc55-45ed-91f0-73ae0a8535fd"],
+  "11/19/18 12:33:52 \
+In[38]:=",ExpressionUUID->"f9c881b2-6e9f-4757-873d-e87b287655dd"],
 
 Cell[BoxData[
- RowBox[{"<<", "SilviaCollection`"}]], "Input",
- CellChangeTimes->{{3.75158936282403*^9, 3.7515893666914625`*^9}},
- CellLabel->
-  "11/19/18 12:27:24 \
-In[9]:=",ExpressionUUID->"795aa93e-6bc8-4d74-b355-70bf376c7c1a"]
+ RowBox[{"Quit", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.751591092345851*^9, 
+  3.7515910939395933`*^9}},ExpressionUUID->"c468276c-835c-474a-9a07-\
+c0b5791b2f58"]
 },
-WindowSize->{1920, 997},
-WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+WindowSize->{958, 988},
+WindowMargins->{{Automatic, -7}, {Automatic, 0}},
 FrontEndVersion->"11.3 for Microsoft Windows (64-bit) (March 6, 2018)",
 StyleDefinitions->"myNoteStyle.nb"
 ]
@@ -145,18 +168,16 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 180, 4, 51, "Input",ExpressionUUID->"715490cd-28c5-400d-80ea-dcf489382e9a"],
-Cell[741, 26, 725, 20, 90, "Input",ExpressionUUID->"3b7ec5a0-1eab-4431-bc24-6efead5bc8bb"],
+Cell[558, 20, 373, 6, 45, "InitializationCell",ExpressionUUID->"63a9cdd2-d4a2-4553-b44d-e3c1efa942fd"],
+Cell[934, 28, 295, 7, 51, "Input",ExpressionUUID->"c1580a27-0d67-40ef-b421-e67f2099471a"],
+Cell[1232, 37, 800, 21, 76, "Input",ExpressionUUID->"b1cbed21-200f-47c6-9257-de37cd5f985d"],
 Cell[CellGroupData[{
-Cell[1491, 50, 538, 11, 71, "Input",ExpressionUUID->"a5f27418-18e7-4657-94c5-bb5da0c922e9"],
-Cell[2032, 63, 893, 19, 35, "Output",ExpressionUUID->"d5efa1f3-1caf-4e53-90d4-0d98a6280904"]
+Cell[2057, 62, 991, 21, 109, "Input",ExpressionUUID->"d39b4494-e3f9-426b-b452-4e3eda331ba8"],
+Cell[3051, 85, 991, 20, 35, "Output",ExpressionUUID->"50153d35-1ccf-4ab7-bda3-55be57f577f4"],
+Cell[4045, 107, 1024, 21, 35, "Output",ExpressionUUID->"93aa2adc-9dbd-4855-ba05-2eb0e1923539"]
 }, Open  ]],
-Cell[CellGroupData[{
-Cell[2962, 87, 285, 6, 51, "Input",ExpressionUUID->"6d3865c8-14ef-4b52-91d2-52b39659e681"],
-Cell[3250, 95, 828, 18, 35, "Output",ExpressionUUID->"6afb2c28-8fb2-492a-8a0c-dea4417d41cf"]
-}, Open  ]],
-Cell[4093, 116, 290, 6, 51, "Input",ExpressionUUID->"9dcb88a0-bc55-45ed-91f0-73ae0a8535fd"],
-Cell[4386, 124, 229, 5, 51, "Input",ExpressionUUID->"795aa93e-6bc8-4d74-b355-70bf376c7c1a"]
+Cell[5084, 131, 478, 15, 51, "Input",ExpressionUUID->"f9c881b2-6e9f-4757-873d-e87b287655dd"],
+Cell[5565, 148, 180, 4, 37, "Input",ExpressionUUID->"c468276c-835c-474a-9a07-c0b5791b2f58"]
 }
 ]
 *)
