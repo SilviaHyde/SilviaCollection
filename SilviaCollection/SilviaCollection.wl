@@ -3,6 +3,7 @@
 Package["SilviaCollection`"]
 
 
+PackageExport["pipe"]
 PackageExport["branch"]
 PackageExport["levelIndentFunc"]
 PackageExport["horizontalTreeForm"]
@@ -15,7 +16,8 @@ PackageExport["colorToHex"]
 PackageExport["DatasetGrid"]
 
 
-ClearAll[branch]
+ClearAll[pipe,branch]
+pipe=RightComposition;
 branch=Through@*{##}&;
 
 
