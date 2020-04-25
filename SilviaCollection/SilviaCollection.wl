@@ -3,6 +3,7 @@
 Package["SilviaCollection`"]
 
 
+PackageExport["FindDivisionsExact"]
 PackageExport["pipe"]
 PackageExport["branch"]
 PackageExport["levelIndentFunc"]
@@ -15,6 +16,8 @@ PackageExport["colorFromHex"]
 PackageExport["colorToHex"]
 PackageExport["DatasetGrid"]
 
+ClearAll[FindDivisionsExact]
+FindDivisionsExact[range : {_, _}, n_Integer?(# >= 2 &)] := Rescale[Range[n] // N // Rescale, {0, 1}, range]
 
 ClearAll[pipe,branch]
 pipe=RightComposition;
