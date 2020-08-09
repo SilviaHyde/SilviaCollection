@@ -6,7 +6,7 @@
 
 Paclet[
     Name               -> "SilviaCollection",
-    Version            -> "0.0.3",
+    Version            -> "0.0.4",
     Description        -> "A collection of some handy functions.",
     MathematicaVersion -> "10+",
     Creator            -> "Silvia H.",

@@ -19,9 +19,10 @@ PackageExport["DatasetGrid"]
 ClearAll[FindDivisionsExact]
 FindDivisionsExact[range : {_, _}, n_Integer?(# >= 2 &)] := Rescale[Range[n] // N // Rescale, {0, 1}, range]
 
-ClearAll[pipe,branch]
+ClearAll[pipe,branch,branchSeq]
 pipe=RightComposition;
 branch=Through@*{##}&;
+branchSeq=pipe[branch@##,Apply@Sequence]&;
 
 
 ClearAll[levelIndentFunc]
