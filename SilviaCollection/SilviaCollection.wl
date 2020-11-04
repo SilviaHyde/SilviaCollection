@@ -19,6 +19,7 @@ PackageExport["DatasetGrid"]
 
 ClearAll[FindDivisionsExact]
 FindDivisionsExact[range : {_, _}, n_Integer?(# >= 2 &)] := Rescale[Range[n] // N // Rescale, {0, 1}, range]
+FindDivisionsExact[n_Integer?(#>=2&)]:=FindDivisionsExact[{0,1},n]
 
 ClearAll[pipe,branch,branchSeq]
 pipe=RightComposition;
@@ -27,6 +28,20 @@ branchSeq=pipe[branch@##,Apply@Sequence]&;
 
 
 ClearAll[levelIndentFunc]
+SilviaCollection`Private`levelIndentFuncMsg =
+  {
+    RowBox[{RowBox[{"traceRes", "=", RowBox[{"Trace", "[", RowBox[{RowBox[{"Reduce", "[", RowBox[{RowBox[{SuperscriptBox["x", "2"], "\[Equal]", RowBox[{"-", "1"}]}], ",", "x"}], "]"}], ",", RowBox[{"TraceInternal", "\[Rule]", "True"}], ",", RowBox[{"TraceDepth", "\[Rule]", "3"}]}], "]"}]}], ";"}]
+    , RowBox[{"Export", "[", RowBox[{"\"tracePrintTest.txt\"", ",", RowBox[{"levelIndentFunc", "[", "traceRes", "]"}], ",", "\"String\""}], "]"}]
+    } // pipe[
+      Map@RawBoxes
+      , Column
+      , Grid[{
+            {Style["Usage Example: ", Bold, 14], SpanFromLeft}
+            , {"\t", Style[#,ShowStringCharacters->True]}
+          }, Alignment -> Left, Frame -> False
+        ] &
+    ];
+levelIndentFunc::usage=ToString[ SilviaCollection`Private`levelIndentFuncMsg, StandardForm ]
 levelIndentFunc[lst_] :=
  MapIndexed[
     {ConstantArray["\t", Length[#2] - 1], #1, "\n"} &,
@@ -44,16 +59,37 @@ Export["tracePrintTest.txt", levelIndentFunc@traceRes, "String"]
 ClearAll[horizontalTreeForm]
 Options[horizontalTreeForm]={"Transform"->RotationTransform[\[Pi]/2],AspectRatio->1.5};
 horizontalTreeForm[OptionsPattern[]]:=
-TreeForm/*ToBoxes/*(Block[{
-GraphicsBox=Inactive[GraphicsBox],TagBox=Inactive[TagBox],GraphicsComplexBox=Inactive[GraphicsComplexBox]
-,TooltipBox=Inactive[TooltipBox],InsetBox=Inactive[InsetBox],FormBox=Inactive[FormBox],StyleBox=Inactive[StyleBox],RowBox=Inactive[RowBox]
-,FrameBox=Inactive[FrameBox]
-},#]&)/*
-ReplaceRepeated[Inactive[TooltipBox|TagBox][e_,l__]:>e]/*
-ReplaceAll[Inactive[GraphicsComplexBox][pts_,others__]:>Inactive[GraphicsComplexBox][pts//OptionValue["Transform"]/*ScalingTransform[{1,OptionValue[AspectRatio]}],others]]/*
-ReplaceAll[(FontSize->_):>(FontSize->10)]/*
-ReplaceAll[{(AspectRatio->_):>(AspectRatio->Automatic),(PlotRangePadding->_):>Sequence[]}]/*
-Activate/*RawBoxes
+  pipe[
+   TreeForm
+   , ToBoxes
+   , Block[{
+      GraphicsBox = Inactive[GraphicsBox]
+      , TagBox = Inactive[TagBox]
+      , GraphicsComplexBox = Inactive[GraphicsComplexBox]
+      , TooltipBox = Inactive[TooltipBox]
+      , InsetBox = Inactive[InsetBox]
+      , FormBox = Inactive[FormBox]
+      , StyleBox = Inactive[StyleBox]
+      , RowBox = Inactive[RowBox]
+      , FrameBox = Inactive[FrameBox]
+      }, #] &
+   , ReplaceRepeated[Inactive[TooltipBox | TagBox][e_, l__] :> e]
+   , ReplaceAll[Inactive[GraphicsComplexBox][pts_, others__] :>
+      Inactive[GraphicsComplexBox][
+       pts // pipe[
+         OptionValue["Transform"]
+         , ScalingTransform[{1, OptionValue[AspectRatio]}]
+         ]
+       , others]
+     ]
+   , ReplaceAll[(FontSize -> _) :> (FontSize -> 10)]
+   , ReplaceAll[{
+      (AspectRatio -> _) :> (AspectRatio -> Automatic)
+      , (PlotRangePadding -> _) :> Sequence[]
+     }]
+   , Activate
+   , RawBoxes
+   ]
 
 
 ClearAll[GraphEdgeSleek]
