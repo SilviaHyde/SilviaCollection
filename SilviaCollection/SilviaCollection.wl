@@ -3,6 +3,12 @@
 Package["SilviaCollection`"]
 
 
+PackageExport["nativeSize"]
+PackageExport["checkerboard"]
+PackageExport["gammaDecode"]
+PackageExport["gammaEncode"]
+PackageExport["imgGammaDecode"]
+PackageExport["imgGammaEncode"]
 PackageExport["FindDivisionsExact"]
 PackageExport["pipe"]
 PackageExport["branch"]
@@ -25,6 +31,55 @@ ClearAll[pipe,branch,branchSeq]
 pipe=RightComposition;
 branch=Through@*{##}&;
 branchSeq=pipe[branch@##,Apply@Sequence]&;
+
+
+ClearAll[nativeSize]
+nativeSize[magF_:1]:=
+	Module[{
+		nativeResolution=120,Sstd=72,nbMgfy=AbsoluteCurrentValue[EvaluationNotebook[],Magnification],$width=ImageDimensions[#][[1]]
+	}
+	, Image[#,ImageSize->magF Sstd/nativeResolution $width/nbMgfy]
+	]&
+
+
+ClearAll[checkerboard]
+checkerboard[width_Integer,height_Integer,step:_Integer:100,gap:{_Integer,_Integer}:{15,5}]:=
+ParallelTable[
+	(UnitStep[Mod[i,step]/step-1/2]+UnitStep[Mod[j,step]/step-1/2])//Plus[#,(-1)^UnitStep[1-#] 1/3 UnitStep[Mod[i+j,gap[[1]]]-gap[[2]]]]&
+	,{i,height},{j,width}
+	]//Rescale//Image
+
+
+ClearAll[gammaDecode,gammaEncode]
+gammaDecode=Compile[{{c,_Real}}
+	,With[{z=Abs[c]},Sign[c]If[z<=.04045,z/12.92,((z+0.055)/1.055)^2.4]]
+	,RuntimeAttributes->{Listable},Parallelization->True
+	,"RuntimeOptions"->"Speed"
+	,CompilationTarget->"C"
+	];
+gammaEncode=Compile[{{c,_Real}}
+	,With[{z=Abs[c]},Sign[c]If[z<=.04045/12.92,12.92z,1.055z^(1/2.4)-0.055]]
+	,RuntimeAttributes->{Listable},Parallelization->True
+	,"RuntimeOptions"->"Speed"
+	,CompilationTarget->"C"
+	];
+
+
+ClearAll[imgGammaDecode,imgGammaEncode]
+imgGammaDecode=pipe[
+	branchSeq[
+		pipe[ImageData[#,"Real"]&,gammaDecode]
+		,Information[#,"ColorSpace"]&
+	]
+	,Image[#1,ColorSpace->#2]&
+];
+imgGammaEncode=pipe[
+	branchSeq[
+		pipe[ImageData[#,"Real"]&,gammaEncode]
+		,Information[#,"ColorSpace"]&
+	]
+	,Image[#1,ColorSpace->#2]&
+];
 
 
 ClearAll[levelIndentFunc]
