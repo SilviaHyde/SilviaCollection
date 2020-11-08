@@ -50,18 +50,20 @@ ParallelTable[
 	]//Rescale//Image
 
 
+$gammaDClib = FindLibrary["gammaDecode"];
+$gammaEClib = FindLibrary["gammaEncode"];
 ClearAll[gammaDecode,gammaEncode]
-gammaDecode=Compile[{{c,_Real}}
-	,With[{z=Abs[c]},Sign[c]If[z<=.04045,z/12.92,((z+0.055)/1.055)^2.4]]
-	,RuntimeAttributes->{Listable},Parallelization->True
-	,"RuntimeOptions"->"Speed"
-	,CompilationTarget->"C"
+gammaDecode=
+	CompiledFunction[{11,12.2,5848},{_Real},{{3,0,0},{3,0,5}},{{0.04045,{3,0,2}},{0.055,{3,0,6}},{2.4,{3,0,9}},{0.9478672985781991,{3,0,8}},{0.,{3,0,3}},{0.07739938080495357,{3,0,4}}},{1,1,11,0,0}
+		,{{40,38,3,0,0,3,0,1},{40,44,3,0,0,2,0,0},{27,4,3,1,2,0},{2,0,4},{16,1,4,5},{7,5,7},{3,5},{13,1,6,7},{16,7,8,7},{41,263,3,0,7,3,0,9,3,0,10},{7,10,7},{10,0,5},{16,5,7,5},{1}}
+		,Function[{c},With[{z=Abs[c]},Sign[c] If[z<=0.04045,z 0.07739938080495357,((z+0.055) 0.9478672985781991)^2.4]],Listable],Evaluate
+		,LibraryFunction[$gammaDClib,"compiledFunction2",{{Real,0,"Constant"}},Real]
 	];
-gammaEncode=Compile[{{c,_Real}}
-	,With[{z=Abs[c]},Sign[c]If[z<=.04045/12.92,12.92z,1.055z^(1/2.4)-0.055]]
-	,RuntimeAttributes->{Listable},Parallelization->True
-	,"RuntimeOptions"->"Speed"
-	,CompilationTarget->"C"
+gammaEncode=
+	CompiledFunction[{11,12.2,5848},{_Real},{{3,0,0},{3,0,5}},{{-0.055,{3,0,10}},{0.0031308049535603718,{3,0,2}},{1.055,{3,0,6}},{12.92,{3,0,4}},{0.4166666666666667,{3,0,7}},{0.,{3,0,3}}},{1,1,11,0,0}
+		,{{40,38,3,0,0,3,0,1},{40,44,3,0,0,2,0,0},{27,4,3,1,2,0},{2,0,4},{16,4,1,5},{7,5,8},{3,5},{41,263,3,0,1,3,0,7,3,0,8},{16,6,8,9},{13,9,10,9},{7,9,8},{10,0,5},{16,5,8,5},{1}}
+		,Function[{c},With[{z=Abs[c]},Sign[c] If[z<=0.0031308049535603718,12.92 z,1.055 z^0.4166666666666667-0.055]],Listable],Evaluate
+		,LibraryFunction[$gammaEClib,"compiledFunction3",{{Real,0,"Constant"}},Real]
 	];
 
 
