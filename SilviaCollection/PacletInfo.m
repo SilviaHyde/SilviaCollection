@@ -6,11 +6,14 @@
 
 Paclet[
     Name               -> "SilviaCollection",
-    Version            -> "0.0.7",
+    Version            -> "0.0.8",
     Description        -> "A collection of some handy functions.",
     MathematicaVersion -> "10+",
+    SystemID           -> "Windows-x86-64",
     Creator            -> "Silvia H.",
     Extensions         -> {
-    						{"Kernel", Root -> ".", Context -> "SilviaCollection`"}
+    						{"Kernel", Root -> ".", Context -> "SilviaCollection`"},
+    						{"LibraryLink"},
+    						{"Documentation", MainPage -> "Tutorials/SilviaCollection"}
                           }
 ]

@@ -23,7 +23,10 @@ PackageExport["colorFromHex"]
 PackageExport["colorToHex"]
 PackageExport["DatasetGrid"]
 
+(* Use built-in Subdivide instead: *)
 ClearAll[FindDivisionsExact]
+FindDivisionsExact::deprec="FindDivisionsExact is deprecated, use built-in Subdivide instead.";
+Message[FindDivisionsExact::deprec]
 FindDivisionsExact[range : {_, _}, n_Integer?(# >= 2 &)] := Rescale[Range[n] // N // Rescale, {0, 1}, range]
 FindDivisionsExact[n_Integer?(#>=2&)]:=FindDivisionsExact[{0,1},n]
 
@@ -34,11 +37,21 @@ branchSeq=pipe[branch@##,Apply@Sequence]&;
 
 
 ClearAll[nativeSize]
+(*
 nativeSize[magF_:1]:=
 	Module[{
 		nativeResolution=120,Sstd=72,nbMgfy=AbsoluteCurrentValue[EvaluationNotebook[],Magnification],$width=ImageDimensions[#][[1]]
 	}
 	, Image[#,ImageSize->magF Sstd/nativeResolution $width/nbMgfy]
+	]&
+*)
+nativeSize[magF_:1]:=
+	Module[{
+		nativeScale=SystemInformation["Devices","ConnectedDisplays"]//Lookup["Scale"]//First
+		,nbMgfy=AbsoluteCurrentValue[EvaluationNotebook[],Magnification]
+		,$width=ImageDimensions[#][[1]]
+	}
+	, Image[#,ImageSize->(magF*$width)/(nativeScale*nbMgfy)]
 	]&
 
 
@@ -206,7 +219,7 @@ StringSplitNested[str_String,deliStr_String]:=StringSplitNested[str,Characters@d
 
 
 ClearAll[DatasetGrid]
-DatasetGrid = RightComposition[
+DatasetGrid = pipe[
    ToBoxes
    , Cases[#, Style[Grid[__], __], \[Infinity]][[1]] &
    , ReplaceRepeated[{
