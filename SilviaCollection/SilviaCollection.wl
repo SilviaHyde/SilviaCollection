@@ -48,10 +48,12 @@ nativeSize[magF_:1]:=
 nativeSize[magF_:1]:=
 	Module[{
 		nativeScale=SystemInformation["Devices","ConnectedDisplays"]//Lookup["Scale"]//First
+		(* feMgfy does NOT work like nbMgfy. It won't affect image size as counting in pixels.
+		,feMgfy=AbsoluteCurrentValue[$FrontEndSession,Magnification]*)
 		,nbMgfy=AbsoluteCurrentValue[EvaluationNotebook[],Magnification]
 		,$width=ImageDimensions[#][[1]]
 	}
-	, Image[#,ImageSize->(magF*$width)/(nativeScale*nbMgfy)]
+	, Image[#,ImageSize->(magF*$width)/(nativeScale*(*feMgfy**)nbMgfy)]
 	]&
 
 
