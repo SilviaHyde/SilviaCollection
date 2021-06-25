@@ -9,8 +9,8 @@ PackageExport["gammaDecode"]
 PackageExport["gammaEncode"]
 PackageExport["imgGammaDecode"]
 PackageExport["imgGammaEncode"]
-PackageExport["FindDivisionsExact"]
 PackageExport["pipe"]
+PackageExport["pipeList"]
 PackageExport["branch"]
 PackageExport["branchSeq"]
 PackageExport["levelIndentFunc"]
@@ -23,15 +23,9 @@ PackageExport["colorFromHex"]
 PackageExport["colorToHex"]
 PackageExport["DatasetGrid"]
 
-(* Use built-in Subdivide instead: *)
-ClearAll[FindDivisionsExact]
-FindDivisionsExact::deprec="FindDivisionsExact is deprecated, use built-in Subdivide instead.";
-Message[FindDivisionsExact::deprec]
-FindDivisionsExact[range : {_, _}, n_Integer?(# >= 2 &)] := Rescale[Range[n] // N // Rescale, {0, 1}, range]
-FindDivisionsExact[n_Integer?(#>=2&)]:=FindDivisionsExact[{0,1},n]
-
-ClearAll[pipe,branch,branchSeq]
+ClearAll[pipe,pipeList,branch,branchSeq]
 pipe=RightComposition;
+pipeList=pipe[Fold[branchSeq[Identity,pipe[#2,#1]]&,Identity,Reverse@{##}],List]&;
 branch=Through@*{##}&;
 branchSeq=pipe[branch@##,Apply@Sequence]&;
 
