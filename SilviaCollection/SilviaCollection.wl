@@ -159,7 +159,11 @@ horizontalTreeForm[OptionsPattern[]]:=
 
 
 ClearAll[GraphEdgeSleek]
-GraphEdgeSleek[graph_]:=graph//ToBoxes//#/.BezierCurveBox->BSplineCurveBox&//MakeExpression//ReleaseHold
+GraphEdgeSleek=pipe[
+			ToBoxes,ToString[#,InputForm]&,ToExpression
+			,Insert[BaseStyle->{BezierCurveBoxOptions->{Method->{"SplinePoints"->20}}},{2,-1}]
+			,MakeExpression,ReleaseHold
+		];
 
 
 Clear[colorFromHex, colorToHex]
