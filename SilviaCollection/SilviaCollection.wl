@@ -3,16 +3,18 @@
 Package["SilviaCollection`"]
 
 
+PackageExport["pipe"]
+PackageExport["pipeList"]
+PackageExport["branch"]
+PackageExport["branchSeq"]
+PackageExport["deCurry"]
+
 PackageExport["nativeSize"]
 PackageExport["checkerboard"]
 PackageExport["gammaDecode"]
 PackageExport["gammaEncode"]
 PackageExport["imgGammaDecode"]
 PackageExport["imgGammaEncode"]
-PackageExport["pipe"]
-PackageExport["pipeList"]
-PackageExport["branch"]
-PackageExport["branchSeq"]
 PackageExport["levelIndentFunc"]
 PackageExport["horizontalTreeForm"]
 PackageExport["GraphEdgeSleek"]
@@ -24,10 +26,21 @@ PackageExport["colorToHex"]
 PackageExport["DatasetGrid"]
 
 ClearAll[pipe,pipeList,branch,branchSeq]
+
 pipe=RightComposition;
 pipeList=pipe[Fold[branchSeq[Identity,pipe[#2,#1]]&,Identity,Reverse@{##}],List]&;
+
 branch=Through@*{##}&;
 branchSeq=pipe[branch@##,Apply@Sequence]&;
+
+deCurry = pipe[
+                    branchSeq[ Head, Apply@List ]
+                   ,CurryApplied[3][Fold][Construct]
+                   ];
+(*
+In[]:= f[a, b, c, d] // reverseCurry
+Out[]= f[a][b][c][d]
+*)
 
 
 ClearAll[nativeSize]
