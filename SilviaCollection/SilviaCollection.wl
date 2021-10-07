@@ -15,6 +15,9 @@ PackageExport["gammaDecode"]
 PackageExport["gammaEncode"]
 PackageExport["imgGammaDecode"]
 PackageExport["imgGammaEncode"]
+PackageExport["lsRGB2okLab"]
+PackageExport["okLab2lsRGB"]
+
 PackageExport["levelIndentFunc"]
 PackageExport["horizontalTreeForm"]
 PackageExport["GraphEdgeSleek"]
@@ -104,6 +107,16 @@ imgGammaEncode=pipe[
 	]
 	,Image[#1,ColorSpace->#2]&
 ];
+
+
+lsrgb2lms={{0.4122214708`,0.5363325363`,0.0514459929`},{0.2119034982`,0.6806995451`,0.1073969566`},{0.0883024619`,0.2817188376`,0.6299787005`}}\[Transpose];
+lsrgb2lmsInv=Inverse@lsrgb2lms;
+lms2oklab={{0.2104542553`,0.793617785`,-0.0040720468`},{1.9779984951`,-2.428592205`,0.4505937099`},{0.0259040371`,0.7827717662`,-0.808675766`}}\[Transpose];
+lms2oklabInv=Inverse@lms2oklab;
+
+
+lsRGB2okLab[rgb_]/;MatchQ[Dimensions[rgb],{3}|{_,3}]:=CubeRoot[rgb . lsrgb2lms] . lms2oklab
+okLab2lsRGB[lab_]/;MatchQ[Dimensions[lab],{3}|{_,3}]:=Power[lab . lms2oklabInv,3] . lsrgb2lmsInv
 
 
 ClearAll[levelIndentFunc]
