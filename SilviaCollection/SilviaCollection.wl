@@ -27,6 +27,7 @@ PackageExport["StringSplitNested"]
 PackageExport["colorFromHex"]
 PackageExport["colorToHex"]
 PackageExport["DatasetGrid"]
+PackageExport["multiDimGrid"]
 
 ClearAll[pipe,pipeList,branch,branchSeq]
 
@@ -65,6 +66,44 @@ nativeSize[magF_:1]:=
 	}
 	, Image[#,ImageSize->(magF*$width)/(nativeScale*(*feMgfy**)nbMgfy)]
 	]&
+
+
+multiDimGrid[data_?ArrayQ] :=
+ Module[{array = data, fullDim, levels, gridDepth, rowDim, colDim, rowAccu, colAccu
+         , render = Function[{content, bg}, Item[Style[content, 6], Background -> bg, FrameStyle -> Directive[GrayLevel[1], AbsoluteThickness[.5]], Alignment -> {Center, Center}]]
+        }
+        , If[OddQ@ArrayDepth@array, array = {array}]
+        ; fullDim = Dimensions@array
+        ; levels = 2 Range[Length[fullDim]/2] - 2
+        ; gridDepth = Length@levels
+        ; {rowDim, colDim} = fullDim // {#[[1 ;; -1 ;; 2]], #[[2 ;; -1 ;; 2]]} &
+        ; rowAccu = FoldList[#2 (#1 + 1) &, rowDim // Rest // Append[0] // Reverse] // Reverse
+        ; colAccu = FoldList[#2 (#1 + 1) &, colDim // Rest // Append[0] // Reverse] // Reverse
+        ; array // pipe[
+                        Map[Style[#, 8] &, #, {Length[fullDim]}] &
+                        , CurryApplied[Fold, {1, 3, 2}][
+                              Function[{grid, lvl, dim, gap, styleF}
+                                       , Map[pipe[ArrayFlatten,
+                                                  {styleF /@ Range[dim[[2]]], ConstantArray[SpanFromLeft, {dim[[2]], gap[[2]]}]} // pipe[Apply@Riffle, Flatten, Prepend]
+                                                  , Transpose,
+                                                  {styleF /@ Range[dim[[1]]], ConstantArray[SpanFromAbove, {dim[[1]], gap[[1]]}]} // pipe[Apply@Riffle, Flatten, Prepend[styleF@""], Prepend]
+                                                  , Transpose]
+                                             , grid, {lvl}
+                                            ]
+                                      ][#1, Sequence @@ #2] &
+                              , {
+                                  levels // Reverse
+                                  , Map[Reverse, {rowDim, colDim}]//Transpose
+                                  , Map[Reverse, {rowAccu, colAccu}]//Transpose
+                                  , If[Length[levels] == 1
+                                        , {CurryApplied[render, {2, 1}]@GrayLevel[0.7]}
+                                        , N[Subdivide[.3, 1, Length[levels] - 1]] // pipe[Reverse, pipe[ColorData["GrayYellowTones"], Lighter[#, .2] &] /@ # &, CurryApplied[render, {2, 1}] /@ # &]
+                                      ]
+                                }//Transpose
+                         ]
+                        , Grid[#, Frame -> None, Alignment -> "."] &
+                       ]
+  ]
 
 
 ClearAll[checkerboard]
