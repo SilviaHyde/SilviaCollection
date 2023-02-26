@@ -28,6 +28,8 @@ PackageExport["colorFromHex"]
 PackageExport["colorToHex"]
 PackageExport["DatasetGrid"]
 PackageExport["multiDimGrid"]
+PackageExport["randomIntegerPartitions"]
+
 
 ClearAll[pipe,pipeList,branch,branchSeq]
 
@@ -44,6 +46,21 @@ deCurry = pipe[
 (*
 In[]:= f[a, b, c, d] // reverseCurry
 Out[]= f[a][b][c][d]
+*)
+
+
+randomIntegerPartitions[n_Integer,parts_Integer,group_Integer]:=
+	RandomVariate[DirichletDistribution[ConstantArray[1,parts]],group]//
+		pipe[
+			Round[(n-parts)#]\[Transpose]&
+			,Append[#,n-parts-Total[#]]\[Transpose]+1&
+		]
+(*
+In[]:= randomIntegerPartitions[10,5,3] // pipe[Transpose,Join[#,Thread[{" \[Sum] \[DoubleLongRightArrow] ",Total@#}]\[Transpose]]&,Transpose,Grid]
+Out[]=
+		2	2	1	2	3	 \[Sum] \[DoubleLongRightArrow] 	10
+		3	3	1	2	1	 \[Sum] \[DoubleLongRightArrow] 	10
+		2	1	1	4	2	 \[Sum] \[DoubleLongRightArrow] 	10
 *)
 
 
@@ -69,10 +86,11 @@ nativeSize[magF_:1]:=
 
 
 multiDimGrid[data_?ArrayQ] :=
- Module[{array = data, fullDim, levels, gridDepth, rowDim, colDim, rowAccu, colAccu
+ Module[{array = data, oddQ, fullDim, levels, gridDepth, rowDim, colDim, rowAccu, colAccu
          , render = Function[{content, bg}, Item[Style[content, 6], Background -> bg, FrameStyle -> Directive[GrayLevel[1], AbsoluteThickness[.5]], Alignment -> {Center, Center}]]
         }
-        , If[OddQ@ArrayDepth@array, array = {array}]
+        , oddQ = OddQ@ArrayDepth@array
+        ; If[oddQ, array = {array}]
         ; fullDim = Dimensions@array
         ; levels = 2 Range[Length[fullDim]/2] - 2
         ; gridDepth = Length@levels
@@ -102,6 +120,7 @@ multiDimGrid[data_?ArrayQ] :=
                                 }//Transpose
                          ]
                         , Grid[#, Frame -> None, Alignment -> "."] &
+                        , If[oddQ, MapAt[Rest, {1, ;;}], Identity]
                        ]
   ]
 

@@ -6,7 +6,7 @@
 
 Paclet[
     Name               -> "SilviaCollection",
-    Version            -> "0.1.3",
+    Version            -> "0.1.5",
     Description        -> "A collection of some handy functions.",
     MathematicaVersion -> "10+",
     SystemID           -> "Windows-x86-64",
