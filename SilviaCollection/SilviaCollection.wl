@@ -98,7 +98,7 @@ multiDimGrid[data_?ArrayQ] :=
         ; rowAccu = FoldList[#2 (#1 + 1) &, rowDim // Rest // Append[0] // Reverse] // Reverse
         ; colAccu = FoldList[#2 (#1 + 1) &, colDim // Rest // Append[0] // Reverse] // Reverse
         ; array // pipe[
-                        Map[Style[#, 8] &, #, {Length[fullDim]}] &
+                        Map[If[Head[#] === Item, #, Style[#, 8]] &, #, {Length[fullDim]}] &
                         , CurryApplied[Fold, {1, 3, 2}][
                               Function[{grid, lvl, dim, gap, styleF}
                                        , Map[pipe[ArrayFlatten,
@@ -119,8 +119,9 @@ multiDimGrid[data_?ArrayQ] :=
                                       ]
                                 }//Transpose
                          ]
-                        , Grid[#, Frame -> None, Alignment -> "."] &
+                        , Grid[#, Frame -> None, Alignment -> {".", Center}] &
                         , If[oddQ, MapAt[Rest, {1, ;;}], Identity]
+                        , Append[Spacings->{Automatic,-0.1}]
                        ]
   ]
 
@@ -195,7 +196,7 @@ levelIndentFunc::usage=ToString[ SilviaCollection`Private`levelIndentFuncMsg, St
 levelIndentFunc[lst_] :=
  MapIndexed[
     {ConstantArray["\t", Length[#2] - 1], #1, "\n"} &,
-    lst /. e_HoldForm :> StringTake[ToString[e, InputForm], {10, -2}],
+    lst /. e_HoldForm :> StringReplace[StringTake[ToString[e, InputForm], {10, -2}],"\n"->"\\n"],
     {-1}] // Flatten // StringJoin
 (*
 
@@ -262,7 +263,7 @@ colorToHex[color_?ColorQ] :=
 
 
 ClearAll[toRegularArray]
-toRegularArray[raggedLst_] :=
+toRegularArray[raggedLst_, missing_] :=
                               Module[{walk, temp, pos, lvl, dim},
 
                                      SetAttributes[walk, HoldAllComplete];
@@ -288,7 +289,7 @@ toRegularArray[raggedLst_] :=
                                                      ] // Reap // #[[2, 1, ;; -2]] & // Reverse;
 
                                      Remove[walk];
-                                     PadRight[raggedLst, dim, Missing["Nonexistent"]]
+                                     PadRight[raggedLst, dim, missing]
                                      
                                     ]
 
@@ -311,5 +312,6 @@ DatasetGrid = pipe[
         EventHandler[e_, ___] :> e, 
         Annotation[e_, ___] :> e, (ContextMenu -> _) :> Sequence[]
      }]
+   , ReplaceAll[Button[lbl_, ___] :> lbl]
    ];
 

@@ -6,10 +6,10 @@
 
 Paclet[
     Name               -> "SilviaCollection",
-    Version            -> "0.1.5",
+    Version            -> "0.2.0",
     Description        -> "A collection of some handy functions.",
     MathematicaVersion -> "10+",
-    SystemID           -> "Windows-x86-64",
+    (* SystemID           -> "Windows-x86-64", *)
     Creator            -> "Silvia H.",
     Extensions         -> {
     						{"Kernel", Root -> ".", Context -> "SilviaCollection`"},
